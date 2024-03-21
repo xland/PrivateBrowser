@@ -2,6 +2,8 @@
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QTextEdit>
+#include <QGraphicsDropShadowEffect>
+#include <QWebEngineView>
 
 #include "PrivateBrowser.h"
 #include "TitleBar.h"
@@ -10,37 +12,39 @@
 PrivateBrowser::PrivateBrowser(QWidget *parent)
     : QMainWindow(parent)
 {
+    qDebug() << "allen";
+    setWindowFlags(Qt::FramelessWindowHint);
+    auto shadowEffect = new QGraphicsDropShadowEffect();
+    shadowEffect->setBlurRadius(20);
+    shadowEffect->setColor(Qt::gray);
+    shadowEffect->setOffset(0, 0);
+    setGraphicsEffect(shadowEffect);
+    setAttribute(Qt::WA_TranslucentBackground, true);
+
     setMinimumSize(1200, 800);
     auto container = new QWidget(this);
     setCentralWidget(container);
 
     auto splitter = new QSplitter(Qt::Horizontal, container);
+    // splitter->setObjectName("splitter");
+    // splitter->setStyleSheet(R"(#splitter{border:0.5px solid #333;border-top:none;})");
     auto leftBar = new LeftBar(splitter);
     splitter->addWidget(leftBar);
-    auto widget = new QWidget(splitter);
-    splitter->addWidget(widget);
+    // auto *webView = new QWebEngineView(this);
+    // webView->setUrl(QUrl("https://www.baidu.com"));
+    // webView->show();
+    // webView->resize(1024, 800);
+    auto browserContent = new QWidget(this);
+    browserContent->setStyleSheet(R"(background:#fff;)");
+    splitter->addWidget(browserContent);
     splitter->setSizes({100, width() - 100});
-    // setWindowFlags(Qt::FramelessWindowHint);
 
     auto winLayout = new QVBoxLayout(container);
     container->setLayout(winLayout);
     winLayout->addWidget(new TitleBar(container));
-    winLayout->setContentsMargins(0, 0, 0, 0);
+    winLayout->setContentsMargins(10, 10, 10, 10);
     winLayout->setSpacing(0);
-
     winLayout->addWidget(splitter);
-
-    auto vboxLayout = new QVBoxLayout(splitter);
-    vboxLayout->setContentsMargins(0, 0, 0, 0);
-    vboxLayout->setSpacing(0);
-
-    auto textRight1 = new QTextEdit("右侧1");
-    textRight1->setFixedHeight(30);
-    auto textRight2 = new QTextEdit("右侧2");
-    vboxLayout->addWidget(textRight1);
-    vboxLayout->addWidget(textRight2);
-    widget->setLayout(vboxLayout);
-    // setCentralWidget(winLayout);
 }
 
 PrivateBrowser::~PrivateBrowser()

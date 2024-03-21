@@ -12,8 +12,7 @@ LeftBar::LeftBar(QWidget *parent)
     auto btn = new QLabel("allen", this);
     layout->addWidget(btn);
     setLayout(layout);
-    setStyleSheet("background-color: red;");
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setStyleSheet("background-color: #fff;");
 }
 
 LeftBar::~LeftBar()

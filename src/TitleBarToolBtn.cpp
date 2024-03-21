@@ -2,12 +2,12 @@
 
 TitleBarToolBtn::TitleBarToolBtn(QWidget *parent)
 {
-    QString styleSheet = R"(TitleBarToolBtn:{margin-left:8px;margin-right:8px;background-color: #4CAF50;})";
-    setStyleSheet(styleSheet);
-    QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    setSizePolicy(sizePolicy);
-
-    setFixedSize(36, 30);
+    setAttribute(Qt::WA_StyledBackground);
+    setStyleSheet(R"(TitleBarToolBtn {margin-left:4px;margin-right:4px;background-color: #4CAF50;border-radius:8px;}
+    TitleBarToolBtn:hover {background-color: #A8C7FA;}
+    )");
+    setMinimumSize(30, 22);
+    setMaximumSize(30, 22);
 }
 
 TitleBarToolBtn::~TitleBarToolBtn()
