@@ -1,22 +1,17 @@
-cmake_minimum_required(VERSION 3.5) # CMake install : https://cmake.org/download/
-project(PrivateBrowser LANGUAGES CXX)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_PREFIX_PATH "d:/tool/FUCK/6.7.0/msvc2019_64") # Qt Kit Dir
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-find_package(Qt6 COMPONENTS Core Gui Network Widgets WebEngineWidgets REQUIRED) # Qt COMPONENTS
+cmake_minimum_required(VERSION 3.18)
+project(PrivateBrowser)
+set(CMAKE_CXX_STANDARD 20)
+aux_source_directory(./src ${SOURCES})
+add_executable(PrivateBrowser)
 
-aux_source_directory(./src srcs)
+target_sources(PrivateBrowser PRIVATE ${SOURCES})
 
-# Specify MSVC UTF-8 encoding
-add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-
-add_executable(${PROJECT_NAME}
-    WIN32 # If you need a terminal for debug, please comment this statement
-    ${srcs}
-)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Network Qt6::WebEngineWidgets)
+if(WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+    set_property(TARGET PrivateBrowser PROPERTY VS_DPI_AWARE "PerMonitor")
+    target_compile_definitions(PrivateBrowser PRIVATE $<$<CONFIG:Debug>:UNICODE _UNICODE DEBUG NOMINMAX _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS WIN32 _WINDOWS>)
+    target_compile_definitions(PrivateBrowser PRIVATE $<$<CONFIG:Release>:UNICODE _UNICODE NDEBUG NOMINMAX _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS WIN32 _WINDOWS>)
+    TARGET_LINK_LIBRARIES(PrivateBrowser Dwmapi kernel32 user32 shell32)
+elseif(APPLE)
+endif()
