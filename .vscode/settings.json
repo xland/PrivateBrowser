@@ -1,9 +1,0 @@
-{
-    "qtConfigure.qtKitDir": "d:/tool/FUCK/6.7.0/msvc2019_64",
-    "files.associations": {
-        "qmainwindow": "cpp",
-        "qwidget": "cpp",
-        "qgraphicsdropshadoweffect": "cpp",
-        "qwebengineview": "cpp"
-    }
-}
