@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.18)
 project(PrivateBrowser)
 set(CMAKE_CXX_STANDARD 20)
-aux_source_directory(./src ${SOURCES})
-add_executable(PrivateBrowser)
-
-target_sources(PrivateBrowser PRIVATE ${SOURCES})
+aux_source_directory(./src DIR_SRCS)
+add_executable(PrivateBrowser ${DIR_SRCS})
 
 if(WIN32)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS")
