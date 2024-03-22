@@ -1,0 +1,39 @@
+<template>
+    <style>
+        :host {
+            display: flex;
+            background-color: #d4d4d4;
+            padding-left: 12px;
+            height: 36px;
+            line-height: 36px;
+        }
+        .title{
+            font-size: 14px;
+        }
+    </style>
+    <div class="title">测试程序</div>
+    <div class="toolBtns">
+        <div class="minimizeBtn"></div>
+        <div class="restoreBtn"></div>
+        <div class="maximizeBtn"></div>
+        <div class="closeBtn"></div>
+    </div>
+</template>
+<script>
+    class TitleBar extends HTMLElement {
+      constructor() {
+        super();        
+        this._shadowRoot = this.attachShadow({ mode: 'open' });
+      }
+      connectedCallback() {
+        this._shadowRoot.innerHTML = `%TEMPLATE_CONTENT%`;
+        let titleDom = this._shadowRoot.querySelector(".title");
+        titleDom.addEventListener("mousedown",evt=>{
+            chrome.webview.hostObjects.sync.host.MouseDownDrag();
+            evt.preventDefault();
+            evt.stopPropagation();
+        })
+      }
+    }
+    window.customElements.define('title-bar', TitleBar);
+</script>
