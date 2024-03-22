@@ -27,7 +27,7 @@ Page::~Page()
 void Page::Navigate(const std::string& url)
 {
 	// Schedule an async task to navigate to Bing
-	auto result = webview->Navigate(L"http://127.0.0.1:5500/index.html");
+	auto result = webview->Navigate(L"https://www.baidu.com");
 	EventRegistrationToken token;
 	auto navigateCB = Callback<ICoreWebView2NavigationStartingEventHandler>(this, &Page::navigationStarting);
 	webview->add_NavigationStarting(navigateCB.Get(), &token);

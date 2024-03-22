@@ -51,8 +51,8 @@ std::filesystem::path EnvironmentBox::ensureAppFolder() {
     auto ret = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, nullptr, &pathTmp);
     if (ret != S_OK) {
         CoTaskMemFree(pathTmp);
-        auto result = MessageBox(nullptr, L"δ�ҵ�ϵͳӦ�ó���Ŀ¼AppData�������˳�",
-            L"ϵͳ��ʾ", MB_OK | MB_ICONINFORMATION | MB_DEFBUTTON1);
+        auto result = MessageBox(nullptr, L"123",
+            L"456", MB_OK | MB_ICONINFORMATION | MB_DEFBUTTON1);
         exit(1);
         return path;
     }
@@ -62,8 +62,8 @@ std::filesystem::path EnvironmentBox::ensureAppFolder() {
     if (!std::filesystem::exists(path)) {
         auto flag = std::filesystem::create_directory(path);
         if (!flag) {
-            MessageBox(nullptr, L"����Ŀ¼����ʧ�ܣ������˳�",
-                L"ϵͳ��ʾ", MB_OK | MB_ICONINFORMATION | MB_DEFBUTTON1);
+            MessageBox(nullptr, L"123",
+                L"456", MB_OK | MB_ICONINFORMATION | MB_DEFBUTTON1);
             exit(1);
         }
         auto a = 1;
@@ -74,7 +74,7 @@ std::filesystem::path EnvironmentBox::ensureAppFolder() {
 
 
 bool EnvironmentBox::checkRegKey(const HKEY& key, const std::wstring& subKey) {
-    size_t bufferSize = 20; //ÿλ4������4λ����3���㣬�ٶ��һλ�������ص������
+    size_t bufferSize = 20; 
     std::wstring valueBuf;
     valueBuf.resize(bufferSize);
     auto valueSize = static_cast<DWORD>(bufferSize * sizeof(wchar_t));
