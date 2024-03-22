@@ -27,7 +27,9 @@ private:
 	unsigned long pixelDataSize;
 	HBITMAP bitmap;
 	HDC compatibleDC = NULL;
-	wil::com_ptr<ICoreWebView2Controller> controller;	
+	wil::com_ptr<ICoreWebView2Controller> controller;
+	wil::com_ptr<ICoreWebView2Controller> controller2;
 	Page* page;
+	Page* page2;
 };
 

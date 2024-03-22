@@ -1,6 +1,8 @@
 ﻿#include "Page.h"
 using namespace Microsoft::WRL;
 #include "WindowBase.h"
+#include <WebView2.h>
+
 
 Page::Page(wil::com_ptr<ICoreWebView2> webview,WindowBase* win) :webview{ webview },win{win}
 {
@@ -24,14 +26,34 @@ Page::~Page()
 
 }
 
+
+BOOL CALLBACK EnumChildProc2(HWND hwndChild, LPARAM lParam) {
+	DWORD currentProcessId;
+	GetWindowThreadProcessId(hwndChild, &currentProcessId);
+	if (currentProcessId == (DWORD)lParam) {
+		SetWindowPos(hwndChild, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		auto hwnd2 = GetParent(hwndChild);
+		SetWindowPos(hwnd2, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		//TCHAR className[256];
+		//GetClassName(pHwnd, className, ARRAYSIZE(className));
+		return FALSE;
+	}
+	return TRUE; // 继续枚举下一个窗口
+}
+
+
 void Page::Navigate(const std::string& url)
 {
 	// Schedule an async task to navigate to Bing
-	auto result = webview->Navigate(L"https://www.baidu.com");
+	auto result = webview->Navigate(L"http://127.0.0.1:5500/index.html");
 	EventRegistrationToken token;
 	auto navigateCB = Callback<ICoreWebView2NavigationStartingEventHandler>(this, &Page::navigationStarting);
 	webview->add_NavigationStarting(navigateCB.Get(), &token);
 	webview->OpenDevToolsWindow();
+
+	//UINT32 pid;
+	//webview->get
+	//EnumChildWindows(win->hwnd, EnumChildProc2, pid);
 
 }
 

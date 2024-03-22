@@ -1,5 +1,6 @@
 ﻿#include "WindowBase.h"
 #include <windowsx.h>
+#include <WebView2.h>
 #include <wrl.h>
 #include <wil/com.h>
 #include <dwmapi.h>
@@ -64,16 +65,42 @@ bool WindowBase::CreatePageController()
     return true;
 }
 
+
+
+
+
+
 HRESULT WindowBase::pageCtrlCallBack(HRESULT result, ICoreWebView2Controller* controller)
 {
-    this->controller = controller;
-    wil::com_ptr<ICoreWebView2> webview;
-    auto hr = controller->get_CoreWebView2(&webview);
-    page = new Page(webview,this);
 
-    RECT bounds;
-    GetClientRect(hwnd, &bounds); //todo 多个ctrl
-    hr = controller->put_Bounds(bounds);
+    static bool flag = true;
+    HRESULT hr;
+    if (flag) {
+        this->controller = controller;
+        wil::com_ptr<ICoreWebView2> webview;
+        hr = controller->get_CoreWebView2(&webview);
+        page = new Page(webview, this);
+        RECT bounds{ .left{0},
+        .top{0},
+        .right{400},
+        .bottom{400} };
+        hr = controller->put_Bounds(bounds);
+    }
+    else {
+        this->controller2 = controller;
+        wil::com_ptr<ICoreWebView2> webview;
+        hr = controller2->get_CoreWebView2(&webview);
+        page2 = new Page(webview, this);
+        RECT bounds{ .left{200},
+        .top{200},
+        .right{600},
+        .bottom{600} };
+        hr = controller2->put_Bounds(bounds);
+        //controller2->getwindowha
+        //SetWindowPos(hwnd2, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+
+    }
+    flag = false;
     return hr;
 }
 

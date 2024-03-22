@@ -24,7 +24,7 @@ STDMETHODIMP Host::MaximizeWindow()
 }
 STDMETHODIMP Host::CloseWindow()
 {
-
+    win->CreatePageController();
     return S_OK;
 }
 STDMETHODIMP Host::RestoreWindow()
