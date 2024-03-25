@@ -4,8 +4,8 @@
 #include <QApplication>
 
 #include "TitleBar.h"
-#include "TitleBarToolBtn.h"
 #include "TitleBarLogo.h"
+#include "TitleBarToolBtn.h"
 #include "TitleBarWindowBtn.h"
 
 TitleBar::TitleBar(QWidget *parent)
@@ -46,10 +46,15 @@ TitleBar::TitleBar(QWidget *parent)
     layout->addWidget(minimizeBtn);
     layout->addWidget(maximizeRestoreBtn);
     layout->addWidget(closeBtn);
+    auto r = titleBarLogo->geometry().right();
 }
 
 TitleBar::~TitleBar()
 {
+}
+QPoint TitleBar::getLogoRightBottom()
+{
+    return QPoint();
 }
 void TitleBar::mouseMoveEvent(QMouseEvent *event)
 {

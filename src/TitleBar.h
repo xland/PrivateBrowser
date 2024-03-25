@@ -6,6 +6,8 @@ class TitleBar : public QWidget
 public:
     TitleBar(QWidget *parent = nullptr);
     ~TitleBar();
+    QPoint getLogoRightBottom();
+    // TitleBarLogo *titleBarLogo;
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);

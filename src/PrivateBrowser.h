@@ -11,7 +11,9 @@ public:
 
 protected:
     bool nativeEvent(const QByteArray &eventType, void *message, qintptr *result) override;
+    void showEvent(QShowEvent *event) override;
 
 private:
+    qreal dpr;
     int ncTest(const int &x, const int &y);
 };

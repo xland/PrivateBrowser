@@ -10,6 +10,7 @@
 #include <QWebEngineView>
 #include <QObject>
 #include <QWindow>
+#include <QScreen>
 
 #include "PrivateBrowser.h"
 #include "TitleBar.h"
@@ -67,7 +68,7 @@ PrivateBrowser::~PrivateBrowser()
 bool PrivateBrowser::nativeEvent(const QByteArray &eventType, void *message, qintptr *result)
 {
     MSG *msg = static_cast<MSG *>(message);
-    if (msg && msg->message == WM_NCHITTEST)
+    if (msg->message == WM_NCHITTEST)
     {
         // 此处Qt的mapFromGlobal得不到正确的坐标，必须使用系统API获取正确坐标
         POINT pt;
@@ -78,7 +79,17 @@ bool PrivateBrowser::nativeEvent(const QByteArray &eventType, void *message, qin
         *result = hitTestResult;
         return true; // 表示已处理该消息
     }
+    else if (msg->message == WM_DPICHANGED)
+    {
+        dpr = windowHandle()->screen()->devicePixelRatio();
+        return true;
+    }
     return false;
+}
+
+void PrivateBrowser::showEvent(QShowEvent *event)
+{
+    dpr = windowHandle()->screen()->devicePixelRatio();
 }
 
 int PrivateBrowser::ncTest(const int &x, const int &y)
@@ -121,6 +132,10 @@ int PrivateBrowser::ncTest(const int &x, const int &y)
     }
     else
     {
+        if (x < 130 * dpr && y < 40 * dpr)
+        {
+            return HTCAPTION;
+        }
         return HTCLIENT;
     }
 }
