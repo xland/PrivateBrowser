@@ -6,9 +6,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    // QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QNetworkProxyFactory::setUseSystemConfiguration(false);
     PrivateBrowser w;
     w.show();
+    w.clearFocus();
     return a.exec();
 }
