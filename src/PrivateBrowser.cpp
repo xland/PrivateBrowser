@@ -1,3 +1,7 @@
+#include <dwmapi.h>
+#include <Windows.h>
+#include <windowsx.h>
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QSplitter>
@@ -5,6 +9,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QWebEngineView>
 #include <QObject>
+#include <QWindow>
 
 #include "PrivateBrowser.h"
 #include "TitleBar.h"
@@ -13,21 +18,15 @@
 PrivateBrowser::PrivateBrowser(QWidget *parent)
     : QMainWindow(parent)
 {
-    qDebug() << "allen";
+    qDebug() << "allen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     setWindowFlags(Qt::FramelessWindowHint);
-    auto shadowEffect = new QGraphicsDropShadowEffect();
-    shadowEffect->setBlurRadius(20);
-    shadowEffect->setColor(Qt::gray);
-    shadowEffect->setOffset(0, 0);
-    setGraphicsEffect(shadowEffect);
-    setAttribute(Qt::WA_TranslucentBackground, true);
-
     setMinimumSize(1200, 800);
+
     auto container = new QWidget(this);
     setCentralWidget(container);
 
     auto winLayout = new QVBoxLayout(container);
-    winLayout->setContentsMargins(10, 10, 10, 10);
+    winLayout->setContentsMargins(0, 0, 0, 0);
     winLayout->setSpacing(0);
     container->setLayout(winLayout);
 
@@ -43,19 +42,85 @@ PrivateBrowser::PrivateBrowser(QWidget *parent)
     {
         auto *webView = new QWebEngineView(splitter);
         webView->setBackgroundRole(QPalette::ColorRole::Dark);
-        // webView->setUrl(QUrl("https://www.baidu.com"));
-        webView->setHtml("<html><head></head><body>测试abc</body></html>");
+        webView->setUrl(QUrl("https://www.baidu.com"));
+        // webView->setHtml("<html><head></head><body>测试abc</body></html>");
+        webView->show();
         // 连接QWebEnginePage的loadFinished信号到自定义槽函数
-        connect(webView, &QWebEngineView::loadFinished, [this](bool ok)
-                {
-                auto a = 1;
-                this->clearFocus(); });
+        // connect(webView, &QWebEngineView::loadFinished, [this](bool ok)
+        //         {
+        //         auto a = 1;
+        //         this->clearFocus(); });
+
         splitter->addWidget(webView);
     }
-    // auto browserContent = new QWidget(this);
-    // browserContent->setStyleSheet(R"(background:#687;)");
+    HWND hwnd = (HWND)winId();
+    DWMNCRENDERINGPOLICY policy = DWMNCRP_ENABLED;
+    DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &policy, sizeof(policy));
+    MARGINS margins = {1, 1, 1, 1};
+    DwmExtendFrameIntoClientArea(hwnd, &margins);
 }
 
 PrivateBrowser::~PrivateBrowser()
 {
+}
+
+bool PrivateBrowser::nativeEvent(const QByteArray &eventType, void *message, qintptr *result)
+{
+    MSG *msg = static_cast<MSG *>(message);
+    if (msg && msg->message == WM_NCHITTEST)
+    {
+        // 此处Qt的mapFromGlobal得不到正确的坐标，必须使用系统API获取正确坐标
+        POINT pt;
+        pt.x = GET_X_LPARAM(msg->lParam);
+        pt.y = GET_Y_LPARAM(msg->lParam);
+        ScreenToClient((HWND)winId(), &pt);
+        int hitTestResult = ncTest(pt.x, pt.y);
+        *result = hitTestResult;
+        return true; // 表示已处理该消息
+    }
+    return false;
+}
+
+int PrivateBrowser::ncTest(const int &x, const int &y)
+{
+    // 此处必须使用系统API获取正确窗口大小，正确窗口大小比1200, 800要大
+    RECT r;
+    GetClientRect((HWND)winId(), &r);
+    int size{6}, w{r.right}, h{r.bottom};
+    if (x < size && y < size)
+    {
+        return HTTOPLEFT;
+    }
+    else if (x > size && y < size && x < w - size)
+    {
+        return HTTOP;
+    }
+    else if (y < size && x > w - size)
+    {
+        return HTTOPRIGHT;
+    }
+    else if (y > size && y < h - size && x > w - size)
+    {
+        return HTRIGHT;
+    }
+    else if (y > h - size && x > w - size)
+    {
+        return HTBOTTOMRIGHT;
+    }
+    else if (x > size && y > h - size && x < w - size)
+    {
+        return HTBOTTOM;
+    }
+    else if (x < size && y > h - size)
+    {
+        return HTBOTTOMLEFT;
+    }
+    else if (x < size && y < h - size && y > size)
+    {
+        return HTLEFT;
+    }
+    else
+    {
+        return HTCLIENT;
+    }
 }
