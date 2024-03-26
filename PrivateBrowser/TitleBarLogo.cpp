@@ -13,7 +13,7 @@ TitleBarLogo::TitleBarLogo(QWidget *parent)
     setMaximumWidth(130);
     auto l = new QLabel("allen", this);
 
-    int fontId = QFontDatabase::addApplicationFont(":/font/iconfont.ttf");
+    int fontId = QFontDatabase::addApplicationFont(":/font/res/iconfont.ttf");
     QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
     auto iconFont = new QFont(fontName);
     iconFont->setPixelSize(10);
