@@ -38,7 +38,13 @@ TitleBar::TitleBar(QWidget *parent)
         this->window()->showMinimized();
         });
     auto maximizeRestoreBtn = new TitleBarWindowBtn(QChar(0xe6e5), false,this);
+    connect(maximizeRestoreBtn, &TitleBarWindowBtn::clicked, [this]() {
+        this->window()->showMaximized();
+        });
     auto closeBtn = new TitleBarWindowBtn(QChar(0xe6e7), true,this);
+    connect(closeBtn, &TitleBarWindowBtn::clicked, [this]() {
+        this->window()->close();
+        });
 
     layout->addWidget(titleBarLogo);
 

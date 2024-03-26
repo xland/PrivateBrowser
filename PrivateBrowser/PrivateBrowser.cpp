@@ -128,7 +128,7 @@ int PrivateBrowser::ncTest(const int &x, const int &y)
     {
         return HTLEFT;
     }
-    else if (x < 110 * dpr && y < 40 * dpr)
+    else if (x < 160 * dpr && y < 40 * dpr)
     {
         return HTCAPTION;
     }
