@@ -20,7 +20,7 @@
     })
     let minimizeBtn = document.querySelector(".minimizeBtn")
     minimizeBtn.addEventListener("click",()=>{
-        chrome.webview.hostObjects.sync.host.Close();
+        chrome.webview.hostObjects.sync.host.CloseWindow();
         evt.preventDefault();
         evt.stopPropagation();
     })

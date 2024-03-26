@@ -72,7 +72,6 @@ bool WindowBase::CreatePageController()
 
 HRESULT WindowBase::pageCtrlCallBack(HRESULT result, ICoreWebView2Controller* controller)
 {
-
     static bool flag = true;
     HRESULT hr;
     if (flag) {

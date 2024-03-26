@@ -86,9 +86,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="PrivateBrowser.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
