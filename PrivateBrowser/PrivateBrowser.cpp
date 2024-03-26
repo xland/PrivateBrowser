@@ -18,7 +18,7 @@
 PrivateBrowser::PrivateBrowser(QWidget *parent)
     : QMainWindow(parent)
 {
-    qDebug() << "allen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    setMouseTracking(true);
     setWindowFlags(Qt::FramelessWindowHint);
     setMinimumSize(1200, 800);
 
@@ -128,7 +128,7 @@ int PrivateBrowser::ncTest(const int &x, const int &y)
     {
         return HTLEFT;
     }
-    else if (x < 130 * dpr && y < 40 * dpr)
+    else if (x < 110 * dpr && y < 40 * dpr)
     {
         return HTCAPTION;
     }

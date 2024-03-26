@@ -2,6 +2,9 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QApplication>
+#include <qwindow.h>
+#include <qwidget.h>
+
 
 #include "TitleBar.h"
 #include "TitleBarLogo.h"
@@ -31,6 +34,9 @@ TitleBar::TitleBar(QWidget *parent)
     addressBar->setSizePolicy(sizePolicy);
 
     auto minimizeBtn = new TitleBarWindowBtn(QChar(0xe6e8),false,this);
+    connect(minimizeBtn, &TitleBarWindowBtn::clicked, [this]() {
+        this->window()->showMinimized();
+        });
     auto maximizeRestoreBtn = new TitleBarWindowBtn(QChar(0xe6e5), false,this);
     auto closeBtn = new TitleBarWindowBtn(QChar(0xe6e7), true,this);
 

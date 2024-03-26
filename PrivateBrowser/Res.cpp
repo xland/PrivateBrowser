@@ -15,12 +15,13 @@ void Res::init()
 	res = new Res();
 }
 
-QFont* Res::getIcon()
+QFont* Res::getIcon(int size)
 {
     if (res->iconFont == NULL) {
         int fontId = QFontDatabase::addApplicationFont(":/font/res/iconfont.ttf");
         QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
-        res->iconFont = new QFont(fontName,13);
+        res->iconFont = new QFont(fontName);
     }
+    res->iconFont->setPixelSize(size);
     return res->iconFont;
 }

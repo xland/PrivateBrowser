@@ -29,7 +29,7 @@ bool TitleBarWindowBtn::eventFilter(QObject* obj, QEvent* event)
     if (event->type() == QEvent::Enter) {
         setMouseTracking(true);
         auto bg = isClose ? QColor("#E61123") : QColor("#BECCE3");
-        auto fore = isClose ? QColor("#FFF") : QColor("#666");
+        auto fore = isClose ? QColor("#FFF") : QColor("#000");
         QPalette palette = this->palette();
         palette.setColor(QPalette::ColorRole::Window, bg);
         palette.setColor(QPalette::ColorRole::WindowText, fore);
@@ -45,4 +45,9 @@ bool TitleBarWindowBtn::eventFilter(QObject* obj, QEvent* event)
         return true;
     }
     return QWidget::eventFilter(obj, event);
+}
+
+void TitleBarWindowBtn::mousePressEvent(QMouseEvent* event)
+{
+    emit clicked();
 }

@@ -1,4 +1,4 @@
-#include "TitleBarLogo.h"
+﻿#include "TitleBarLogo.h"
 #include <QWindow>
 #include <QScreen>
 #include <QLabel>
@@ -9,18 +9,23 @@
 
 TitleBarLogo::TitleBarLogo(QWidget *parent)
 {
-    setAttribute(Qt::WA_StyledBackground);
-    setStyleSheet(R"(TitleBarLogo { background-color: #639584;})");
-    setMinimumWidth(130);
-    setMaximumWidth(130);
-    auto l = new QLabel("allen", this);
-
-    l->setFont(*Res::getIcon());
-    l->setText(QChar(0xe6e7));
-
+    setMinimumWidth(160);
+    setMaximumWidth(160);
     auto layout = new QHBoxLayout(this);
+    layout->setContentsMargins(10, 0, 60, 0);
     setLayout(layout);
-    layout->addWidget(l);
+
+    auto logo = new QLabel(this);
+    logo->setFont(*Res::getIcon(21));
+    logo->setText(QChar(0xe644));
+    QPalette pa = logo->palette();
+    pa.setColor(QPalette::ColorRole::WindowText, QColor("#4E6EF2"));
+    logo->setPalette(pa);
+    layout->addWidget(logo);
+
+    auto title = new QLabel(this);
+    title->setText("我的浏览器");
+    layout->addWidget(title);
 }
 
 TitleBarLogo::~TitleBarLogo()
