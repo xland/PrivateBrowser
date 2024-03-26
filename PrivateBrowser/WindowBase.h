@@ -15,6 +15,8 @@ public:
 	void InitWindow(const int& x, const int& y, const long& w, const long& h, const std::wstring& title);
 	bool CreatePageController();
 	HWND hwnd;
+	wil::com_ptr<ICoreWebView2Controller> controller;
+	wil::com_ptr<ICoreWebView2Controller> controller2;
 protected:
 
 private:
@@ -27,8 +29,6 @@ private:
 	unsigned long pixelDataSize;
 	HBITMAP bitmap;
 	HDC compatibleDC = NULL;
-	wil::com_ptr<ICoreWebView2Controller> controller;
-	wil::com_ptr<ICoreWebView2Controller> controller2;
 	Page* page;
 	Page* page2;
 };
