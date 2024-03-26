@@ -24,9 +24,13 @@ TitleBar::TitleBar(QWidget *parent)
     auto titleBarLogo = new TitleBarLogo(this);
 
     auto prevBtn = new TitleBarToolBtn(this);
+    prevBtn->setText(QChar(0xe80b));
     auto nextBtn = new TitleBarToolBtn(this);
+    nextBtn->setText(QChar(0xe80c));
     auto refreshBtn = new TitleBarToolBtn(this);
+    refreshBtn->setText(QChar(0xe741));
     auto homeBtn = new TitleBarToolBtn(this);
+    homeBtn->setText(QChar(0xe630));
 
     auto addressBar = new QWidget(this);
     QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
