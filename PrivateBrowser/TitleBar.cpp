@@ -30,9 +30,9 @@ TitleBar::TitleBar(QWidget *parent)
     sizePolicy.setHorizontalStretch(1);
     addressBar->setSizePolicy(sizePolicy);
 
-    auto minimizeBtn = new TitleBarWindowBtn(this);
-    auto maximizeRestoreBtn = new TitleBarWindowBtn(this);
-    auto closeBtn = new TitleBarWindowBtn(this);
+    auto minimizeBtn = new TitleBarWindowBtn(QChar(0xe6e8),false,this);
+    auto maximizeRestoreBtn = new TitleBarWindowBtn(QChar(0xe6e5), false,this);
+    auto closeBtn = new TitleBarWindowBtn(QChar(0xe6e7), true,this);
 
     layout->addWidget(titleBarLogo);
 
@@ -46,7 +46,6 @@ TitleBar::TitleBar(QWidget *parent)
     layout->addWidget(minimizeBtn);
     layout->addWidget(maximizeRestoreBtn);
     layout->addWidget(closeBtn);
-    auto r = titleBarLogo->geometry().right();
 }
 
 TitleBar::~TitleBar()

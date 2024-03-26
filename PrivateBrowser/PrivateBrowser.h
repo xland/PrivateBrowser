@@ -1,5 +1,6 @@
 #pragma once
 #include <QMainWindow>
+#include <QWebEngineView>
 
 class PrivateBrowser : public QMainWindow
 {
@@ -16,4 +17,5 @@ protected:
 private:
     qreal dpr;
     int ncTest(const int &x, const int &y);
+    QWebEngineView* webView;
 };

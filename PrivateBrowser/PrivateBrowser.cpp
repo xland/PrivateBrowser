@@ -7,7 +7,6 @@
 #include <QSplitter>
 #include <QTextEdit>
 #include <QGraphicsDropShadowEffect>
-#include <QWebEngineView>
 #include <QObject>
 #include <QWindow>
 #include <QScreen>
@@ -41,8 +40,7 @@ PrivateBrowser::PrivateBrowser(QWidget *parent)
     auto leftBar = new LeftBar(splitter);
     splitter->addWidget(leftBar);
     {
-        auto *webView = new QWebEngineView(splitter);
-        webView->setBackgroundRole(QPalette::ColorRole::Dark);
+        webView = new QWebEngineView(splitter);
         webView->setUrl(QUrl("https://www.baidu.com"));
         // webView->setHtml("<html><head></head><body>测试abc</body></html>");
         webView->show();
@@ -130,12 +128,12 @@ int PrivateBrowser::ncTest(const int &x, const int &y)
     {
         return HTLEFT;
     }
+    else if (x < 130 * dpr && y < 40 * dpr)
+    {
+        return HTCAPTION;
+    }
     else
     {
-        if (x < 130 * dpr && y < 40 * dpr)
-        {
-            return HTCAPTION;
-        }
         return HTCLIENT;
     }
 }

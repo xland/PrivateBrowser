@@ -73,6 +73,9 @@
     <Link>
       <AdditionalDependencies>Dwmapi.lib;kernel32.lib;user32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -99,6 +102,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Res.cpp" />
     <ClCompile Include="TitleBar.cpp" />
     <ClCompile Include="TitleBarLogo.cpp" />
     <ClCompile Include="TitleBarToolBtn.cpp" />
@@ -127,6 +131,12 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="TitleBarWindowBtn.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Res.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ToDo.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

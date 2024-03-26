@@ -2,6 +2,9 @@
 
 TitleBarToolBtn::TitleBarToolBtn(QWidget *parent)
 {
+    setAutoFillBackground(true);
+    setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    setCursor(Qt::PointingHandCursor);
     setAttribute(Qt::WA_StyledBackground);
     setStyleSheet(R"(TitleBarToolBtn {margin-left:4px;margin-right:4px;background-color: #4CAF50;border-radius:8px;}
     TitleBarToolBtn:hover {background-color: #A8C7FA;}

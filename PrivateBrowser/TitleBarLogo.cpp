@@ -5,6 +5,8 @@
 #include <QHBoxLayout>
 #include <QFontDatabase>
 
+#include "Res.h"
+
 TitleBarLogo::TitleBarLogo(QWidget *parent)
 {
     setAttribute(Qt::WA_StyledBackground);
@@ -13,11 +15,7 @@ TitleBarLogo::TitleBarLogo(QWidget *parent)
     setMaximumWidth(130);
     auto l = new QLabel("allen", this);
 
-    int fontId = QFontDatabase::addApplicationFont(":/font/res/iconfont.ttf");
-    QString fontName = QFontDatabase::applicationFontFamilies(fontId).at(0);
-    auto iconFont = new QFont(fontName);
-    iconFont->setPixelSize(10);
-    l->setFont(*iconFont);
+    l->setFont(*Res::getIcon());
     l->setText(QChar(0xe6e7));
 
     auto layout = new QHBoxLayout(this);

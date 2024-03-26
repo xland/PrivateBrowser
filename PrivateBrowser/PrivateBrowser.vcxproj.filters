@@ -55,6 +55,9 @@
     <ClCompile Include="TitleBarWindowBtn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Res.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AddressBar.h">
@@ -75,5 +78,13 @@
     <QtMoc Include="TitleBarWindowBtn.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Res.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ToDo.md" />
   </ItemGroup>
 </Project>

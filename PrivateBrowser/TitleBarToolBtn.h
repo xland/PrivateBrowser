@@ -1,5 +1,7 @@
 #include <QWidget>
-class TitleBarToolBtn : public QWidget
+#include <qlabel.h>
+
+class TitleBarToolBtn : public QLabel
 {
     Q_OBJECT
 public:
