@@ -1,10 +1,10 @@
 ﻿#include "Page.h"
 using namespace Microsoft::WRL;
-#include "WindowBase.h"
+#include "WindowMain.h"
 #include <WebView2.h>
 
 
-Page::Page(wil::com_ptr<ICoreWebView2> webview,WindowBase* win) :webview{ webview },win{win}
+Page::Page(wil::com_ptr<ICoreWebView2> webview, WindowMain* win) :webview{ webview },win{win}
 {
 	wil::com_ptr<ICoreWebView2Settings> settings;
 	webview->get_Settings(&settings);
@@ -45,7 +45,7 @@ BOOL CALLBACK EnumChildProc2(HWND hwndChild, LPARAM lParam) {
 void Page::Navigate(const std::string& url)
 {
 	// Schedule an async task to navigate to Bing
-	auto result = webview->Navigate(L"http://127.0.0.1:5500/index.html");
+	auto result = webview->Navigate(L"https://www.baidu.com");
 	EventRegistrationToken token;
 	auto navigateCB = Callback<ICoreWebView2NavigationStartingEventHandler>(this, &Page::navigationStarting);
 	webview->add_NavigationStarting(navigateCB.Get(), &token);

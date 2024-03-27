@@ -6,11 +6,11 @@
 #include <wrl/client.h>
 #include "Host_h.h"
 
-class WindowBase;
+class WindowMain;
 class Host : public Microsoft::WRL::RuntimeClass<Microsoft::WRL::RuntimeClassFlags<Microsoft::WRL::ClassicCom>, IHost, IDispatch>
 {
 public:
-    Host(WindowBase* win);
+    Host(WindowMain* win);
     STDMETHODIMP HitTest(int htValue) override;
     STDMETHODIMP MinimizeWindow() override;
     STDMETHODIMP MaximizeWindow() override;
@@ -21,7 +21,7 @@ public:
     STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgDispId) override;
     STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pDispParams,VARIANT* pVarResult, EXCEPINFO* pExcepInfo, UINT* puArgErr) override;
 private:
-    WindowBase* win;
+    WindowMain* win;
     wil::com_ptr<ITypeLib> m_typeLib;
 };
 

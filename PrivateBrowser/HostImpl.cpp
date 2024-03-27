@@ -1,7 +1,7 @@
 #include "HostImpl.h"
 
-#include "WindowBase.h"
-Host::Host(WindowBase* win):win{win}
+#include "WindowMain.h"
+Host::Host(WindowMain* win):win{win}
 {
 }
 

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include <vector>
-#include "WindowBase.h"
+#include "WindowMain.h"
 #include "EnvironmentBox.h"
 class App
 {
@@ -13,6 +13,6 @@ public:
 	HINSTANCE hinstance;
 private:
 	App(const HINSTANCE& hInstance);
-	std::vector<WindowBase*> windows;
+	std::vector<WindowMain*> windows;
 };
 

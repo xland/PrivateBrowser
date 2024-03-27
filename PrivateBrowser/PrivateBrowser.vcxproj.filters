@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WindowBase.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="WindowMain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -45,15 +42,15 @@
     <ClCompile Include="Host_i.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ControlBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="ToDo.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WindowBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="WindowMain.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -84,6 +81,9 @@
     <ClInclude Include="Host_h.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ControlBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PrivateBrowser.rc">
@@ -94,5 +94,8 @@
     <Midl Include="Host.idl">
       <Filter>源文件</Filter>
     </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)..\..\natvis\wil.natvis" />
   </ItemGroup>
 </Project>
