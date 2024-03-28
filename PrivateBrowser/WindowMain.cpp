@@ -65,6 +65,10 @@ void WindowMain::onSize(const int& w, const int& h)
     {
         ctrls[i]->resize(w, h);
     }
+    if (controller) {
+        RECT bounds{ .left{0}, .top{(LONG)ctrls[0]->rect.fBottom}, .right{w - 300}, .bottom{h} };
+        controller->SetBoundsAndZoomFactor(bounds, 1.0);
+    }
 }
 
 void WindowMain::mouseMove(const int& x, const int& y)
@@ -130,7 +134,7 @@ HRESULT WindowMain::pageCtrlCallBack(HRESULT result, ICoreWebView2Controller* co
         wil::com_ptr<ICoreWebView2> webview;
         hr = controller->get_CoreWebView2(&webview);
         page = new Page(webview, this);
-        RECT bounds{ .left{0}, .top{(LONG)ctrls[0]->rect.fBottom}, .right{w - 200}, .bottom{h}};
+        RECT bounds{ .left{0}, .top{(LONG)ctrls[0]->rect.fBottom}, .right{w - 300}, .bottom{h}};
         hr = controller->put_Bounds(bounds);
     }
     else {
