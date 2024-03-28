@@ -1,9 +1,11 @@
 #include "TitleBar.h"
 #include "TitleBarWindowBtns.h"
+#include "AddressInput.h"
 
 TitleBar::TitleBar()
 {
 	ctrls.push_back(new TitleBarWindowBtns(this));
+	ctrls.push_back(new AddressInput(this));
 }
 
 TitleBar::~TitleBar()
@@ -20,7 +22,6 @@ void TitleBar::paint(SkCanvas* canvas)
 	paint.setStyle(SkPaint::kFill_Style);
 	canvas->drawRect(rect, paint);
 	paint.setColor(0xFF0B57D0);
-	canvas->drawLine(0.f, 0.f, 200, rect.fBottom - 1, paint);
 	canvas->drawLine(0.f, rect.fBottom-1, rect.fRight, rect.fBottom - 1, paint);
 	paintChildren(canvas);
 }
