@@ -9,10 +9,12 @@ public:
 	~App();
 	static void Init(const HINSTANCE& hInstance);
 	static void Dispose();
-	static App* Get();
-	HINSTANCE hinstance;
+	static App* get();
+	static SkFont* getIconFont();
+	static SkFont* getTextFont();
+	WindowMain* windowMain;
 private:
 	App(const HINSTANCE& hInstance);
-	std::vector<WindowMain*> windows;
+	void initFontIcon();
 };
 

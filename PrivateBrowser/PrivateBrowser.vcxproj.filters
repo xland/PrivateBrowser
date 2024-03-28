@@ -45,6 +45,12 @@
     <ClCompile Include="ControlBase.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="TitleBar.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleBarWindowBtns.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -84,9 +90,21 @@
     <ClInclude Include="ControlBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TitleBar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleBarWindowBtns.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="res.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PrivateBrowser.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="res.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>

@@ -2,23 +2,21 @@
 #include <Windows.h>
 #include <include/core/SkFontMetrics.h>
 #include <include/core/SkFontTypes.h>
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <filesystem>
-#include <chrono>
-#include <format>
-#include <ctime>
 #include "WindowMain.h"
+#include "App.h"
 
 
-ControlBase::ControlBase(WindowMain* root):root{root}
+ControlBase::ControlBase(ControlBase* parent):
+    rect{SkRect::MakeEmpty()},parent{ parent }
 {
-    root->ctrls.push_back(this);
 }
 
 ControlBase::~ControlBase()
 {
+    for (auto ctrl: ctrls)
+    {
+        delete ctrl;
+    }
 }
 
 //SkPoint ControlBase::getStartPosOfIconAtCenterOfRect(const char* text, SkRect& rect, SkFont* font)
@@ -44,36 +42,34 @@ ControlBase::~ControlBase()
 //    return SkPoint(x, y);
 //}
 
-float ControlBase::getTextVerticalVal(SkFont* font)
-{
-    SkFontMetrics metrics;
-    font->getMetrics(&metrics);
-    return (metrics.fDescent - metrics.fAscent) / 2 - metrics.fDescent;
-}
-
-std::wstring ControlBase::fileTimeToString(const std::filesystem::file_time_type& timePoint) {
-    auto zone = std::chrono::current_zone();
-    auto sysClock = std::chrono::clock_cast<std::chrono::system_clock>(timePoint);
-    auto zTime = std::chrono::zoned_time(zone, sysClock);
-    //auto now = std::chrono::zoned_time(zone, std::chrono::system_clock::now());
-    //auto span = now.get_sys_time() - zTime.get_sys_time();
-    //auto seconds = std::chrono::duration_cast<std::chrono::seconds>(span).count();
-    auto str = std::format(L"{:%Y-%m-%d %H:%M:%S}", zTime);
-    return str.substr(0, str.find_last_of(L"."));
-}
-
 void ControlBase::repaint()
 {
     isDirty = true;
-    InvalidateRect(root->hwnd, nullptr, false);
+    //RECT r{ .left{(LONG)rect.fLeft},.top{(LONG)rect.fTop},.right{(LONG)rect.fRight},.bottom{(LONG)rect.fBottom} };
+    //InvalidateRect(App::get()->windowMain->hwnd, &r, false);
+    InvalidateRect(App::get()->windowMain->hwnd, nullptr, false);
 }
 
-bool ControlBase::needPaint(SkCanvas* canvas,const SkColor& color)
+void ControlBase::paintChildren(SkCanvas* c)
 {
-    if (!isDirty) return false;
-    SkPaint paint;
-    paint.setColor(color);
-    canvas->drawRect(rect, paint);
-    isDirty = false;
-    return true;
+    for (size_t i = 0; i < ctrls.size(); i++)
+    {
+        ctrls[i]->paint(c);
+    }
+}
+
+void ControlBase::resizeChildren(const int& w, const int& h)
+{
+    for (size_t i = 0; i < ctrls.size(); i++)
+    {
+        ctrls[i]->resize(w,h);
+    }
+}
+
+void ControlBase::mouseMoveChildren(const int& x, const int& y)
+{
+    for (size_t i = 0; i < ctrls.size(); i++)
+    {
+        ctrls[i]->mouseMove(x, y);
+    }
 }

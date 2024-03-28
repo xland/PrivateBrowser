@@ -4,53 +4,96 @@
 #include <wrl.h>
 #include <wil/com.h>
 #include <dwmapi.h>
+#include "App.h"
 #include "EnvironmentBox.h"
+#include "TitleBar.h"
 using namespace Microsoft::WRL;
 
-WindowMain::WindowMain() {
-    long w{ 1200 }, h{ 800 };
+WindowMain::WindowMain(const HINSTANCE& hInstance) {
     RECT rect;
     SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
-    int x = (rect.right - w) / 2;
-    int y = (rect.bottom - h) / 2;
-    InitWindow(x, y, w, h, L"靠谱");
+    x = (rect.right - w) / 2;
+    y = (rect.bottom - h) / 2;
+    initWindow(hInstance);
+    ctrls.push_back(new TitleBar());
 }
 WindowMain::~WindowMain() {
 
 }
 
 void WindowMain::paintWindow()
-{
-    //PAINTSTRUCT ps;
-    //auto dc = BeginPaint(hwnd, &ps);
-    //auto c = canvas.get();
-    //for (size_t i = 0; i < ctrls.size(); i++)
-    //{
-    //    ctrls[i]->paint(c);
-    //}
-    //BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(surfaceMemory.get());
-    //StretchDIBits(dc, 0, 0, w, h, 0, 0, w, h, bmpInfo->bmiColors, bmpInfo, DIB_RGB_COLORS, SRCCOPY);
-    //ReleaseDC(hwnd, dc);
-    //EndPaint(hwnd, &ps);
+{    
+    PAINTSTRUCT ps;
+    BeginPaint(hwnd, &ps);
+    if (ps.rcPaint.top != 0) {
+        //todo 创建浏览器控件之后，也会导致一次刷新
+        return;
+    }
+    auto c = canvas.get();
+    for (size_t i = 0; i < ctrls.size(); i++)
+    {
+        ctrls[i]->paint(c);
+    }
+    BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(surfaceMemory.get());
+    //todo 这里是有问题的
+    StretchDIBits(ps.hdc, 0, 0, w, h, 0, 0, w, h, 
+        bmpInfo->bmiColors, bmpInfo, DIB_RGB_COLORS, SRCCOPY);
+    EndPaint(hwnd, &ps);
     //surfaceMemory.reset(0); //实践证明这样即节省内存，速度也不会慢
 }
 
-void WindowMain::InitWindow(const int& x, const int& y, const long& w, const long& h, const std::wstring& title)
+void WindowMain::onSize(const int& w, const int& h)
 {
-    this->x = x;
-    this->y = y;
     this->w = w;
     this->h = h;
+    auto rowSize{ 4 * w };
+    size_t bmpSize = sizeof(BITMAPINFOHEADER) + h * rowSize;
+    surfaceMemory.reset(bmpSize);
+    BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(surfaceMemory.get());
+    ZeroMemory(bmpInfo, sizeof(BITMAPINFO));
+    bmpInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmpInfo->bmiHeader.biWidth = w;
+    bmpInfo->bmiHeader.biHeight = -h; // negative means top-down bitmap. Skia draws top-down.
+    bmpInfo->bmiHeader.biPlanes = 1;
+    bmpInfo->bmiHeader.biBitCount = 32;
+    bmpInfo->bmiHeader.biCompression = BI_RGB;
+    void* pixels = bmpInfo->bmiColors;
+    SkImageInfo info = SkImageInfo::MakeN32Premul(w, h);
+    auto temp = SkCanvas::MakeRasterDirect(info, pixels, rowSize);
+    canvas = std::move(temp);
+    for (size_t i = 0; i < ctrls.size(); i++)
+    {
+        ctrls[i]->resize(w, h);
+    }
+}
+
+void WindowMain::mouseMove(const int& x, const int& y)
+{
+    if (!isTrackMouseEvent) {
+        TRACKMOUSEEVENT tme = {};
+        tme.cbSize = sizeof(TRACKMOUSEEVENT);
+        tme.dwFlags = TME_HOVER | TME_LEAVE;
+        tme.hwndTrack = hwnd;
+        tme.dwHoverTime = 1;
+        isTrackMouseEvent = TrackMouseEvent(&tme);
+    }
+    for (auto& obj : ctrls)
+    {
+        obj->mouseMove(x, y);
+    }
+}
+
+void WindowMain::initWindow(const HINSTANCE& hInstance)
+{
     static int num = 0;
-    std::wstring winName = L"PrivateBrowser";
-    auto clsName = std::format(L"{}_{}", winName, num++);
-    auto hinstance = GetModuleHandle(NULL);
+    std::wstring title = L"Private Browser";
+    auto clsName = std::format(L"{}_{}", title, num++);
     WNDCLASSEX wcx{};
     wcx.cbSize = sizeof(wcx);
     wcx.style = CS_HREDRAW | CS_VREDRAW;
     wcx.lpfnWndProc = &WindowMain::RouteWindowMessage;
     wcx.cbWndExtra = sizeof(WindowMain*);
-    wcx.hInstance = hinstance;
+    wcx.hInstance = hInstance;
     wcx.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     wcx.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcx.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
@@ -60,18 +103,18 @@ void WindowMain::InitWindow(const int& x, const int& y, const long& w, const lon
         MessageBox(NULL, L"注册窗口类失败", L"系统提示", NULL);
         return;
     }
-    hwnd = CreateWindowEx(NULL, wcx.lpszClassName, title.c_str(),
-        WS_OVERLAPPEDWINDOW, x, y, w, h, NULL, NULL, hinstance, static_cast<LPVOID>(this));
+    hwnd = CreateWindowEx(NULL, wcx.lpszClassName, title.c_str(),WS_OVERLAPPEDWINDOW, 
+        x, y, w, h, NULL, NULL, hInstance, static_cast<LPVOID>(this));
     SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
     const MARGINS shadowState{ 1,1,1,1 };
     DwmExtendFrameIntoClientArea(hwnd, &shadowState);
-    Show();
+    
 }
 
 bool WindowMain::CreatePageController()
 {
     auto callBackInstance = Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(this, &WindowMain::pageCtrlCallBack);
-    auto env = EnvironmentBox::Get()->Environment;
+    auto env = EnvironmentBox::Get()->env;
     auto result = env->CreateCoreWebView2Controller(hwnd, callBackInstance.Get());
     if (FAILED(result)) {
         return false;
@@ -87,10 +130,7 @@ HRESULT WindowMain::pageCtrlCallBack(HRESULT result, ICoreWebView2Controller* co
         wil::com_ptr<ICoreWebView2> webview;
         hr = controller->get_CoreWebView2(&webview);
         page = new Page(webview, this);
-        RECT bounds{ .left{0},
-        .top{40},
-        .right{w-200},
-        .bottom{h} };
+        RECT bounds{ .left{0}, .top{(LONG)ctrls[0]->rect.fBottom}, .right{w - 200}, .bottom{h}};
         hr = controller->put_Bounds(bounds);
     }
     else {
@@ -110,9 +150,11 @@ HRESULT WindowMain::pageCtrlCallBack(HRESULT result, ICoreWebView2Controller* co
     flag = false;
     return hr;
 }
-void WindowMain::Show() {
+void WindowMain::show() {
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
+    // 
+    // 
     //CreateCoreWebView2EnvironmentWithOptions(nullptr, nullptr, nullptr,
     //    Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(
     //        [this](HRESULT result, ICoreWebView2Environment* env) -> HRESULT {
@@ -151,12 +193,12 @@ LRESULT CALLBACK WindowMain::RouteWindowMessage(HWND hWnd, UINT msg, WPARAM wPar
     }
     auto obj = reinterpret_cast<WindowMain*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
     if (obj) {
-        return obj->WindowProc(hWnd, msg, wParam, lParam);
+        return obj->wndProc(hWnd, msg, wParam, lParam);
     }
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT CALLBACK WindowMain::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WindowMain::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static bool mouseTracing = false;
     switch (msg)
@@ -165,13 +207,21 @@ LRESULT CALLBACK WindowMain::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPAR
     {
         return false;
     }
-    //case WM_ERASEBKGND: {
-    //    return false;
-    //}
-    //case WM_PAINT: {
-    //    paintWindow();
-    //    return true;
-    //}
+    case WM_ERASEBKGND: {
+        return false;
+    }
+    case WM_PAINT: {
+        auto aa = this->hwnd;
+        paintWindow();
+        return true;
+    }
+    case WM_NCHITTEST: {
+        POINT pt;
+        pt.x = GET_X_LPARAM(lParam);
+        pt.y = GET_Y_LPARAM(lParam);
+        ScreenToClient(hWnd, &pt);
+        return nctest(pt.x, pt.y);
+    }
     case WM_EXITSIZEMOVE: {
         RECT rect;
         GetWindowRect(hWnd, &rect);
@@ -180,11 +230,12 @@ LRESULT CALLBACK WindowMain::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPAR
         return true;
     }
     case WM_SIZE: {
-        if (lParam != 0 && controller != nullptr) {
-            RECT rect;
-            GetClientRect(hWnd, &rect);
-            controller->put_Bounds(rect);
-        };
+        onSize(LOWORD(lParam), HIWORD(lParam));
+        return true;
+    }
+    case WM_MOUSEMOVE:
+    {
+        mouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
         break;
     }
     case WM_DESTROY: {
@@ -193,4 +244,42 @@ LRESULT CALLBACK WindowMain::WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPAR
     }
     }
     return DefWindowProcW(hWnd, msg, wParam, lParam);
+}
+
+int WindowMain::nctest(const int& x, const int& y)
+{
+    int size{ 6 };
+    if (x < size && y < size) {
+        return HTTOPLEFT;
+    }
+    else if (x > size && y < size && x < w - size) {
+        return HTTOP;
+    }
+    else if (y < size && x > w - size) {
+        return HTTOPRIGHT;
+    }
+    else if (y > size && y<h - size && x > w - size) {
+        return HTRIGHT;
+    }
+    else if (y > h - size && x > w - size) {
+        return HTBOTTOMRIGHT;
+    }
+    else if (x > size && y > h - size && x < w - size) {
+        return HTBOTTOM;
+    }
+    else if (x < size && y > h - size) {
+        return HTBOTTOMLEFT;
+    }
+    else if (x < size && y < h - size && y>size) {
+        return HTLEFT;
+    }
+    else if (x < 200 && y< (LONG)ctrls[0]->rect.fBottom) {
+        return HTCAPTION;
+    }
+    else {
+        if (!isTrackMouseEvent) {
+            SetCursor(LoadCursor(nullptr, IDC_ARROW));
+        }
+        return HTCLIENT;
+    }
 }

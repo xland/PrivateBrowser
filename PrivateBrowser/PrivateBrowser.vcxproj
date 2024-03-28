@@ -111,7 +111,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dwmapi.lib;Shell32.lib;Comctl32.lib;skia.lib;winmm.lib;kernel32.lib;user32.lib;imm32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dwmapi.lib;shell32.lib;comctl32.lib;skia.lib;winmm.lib;kernel32.lib;user32.lib;imm32.lib;gdi32.lib;usp10.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:/sdk/skia/out/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
@@ -140,7 +140,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dwmapi.lib;Shell32.lib;Comctl32.lib;skia.lib;winmm.lib;kernel32.lib;user32.lib;imm32.lib;gdi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dwmapi.lib;shell32.lib;comctl32.lib;skia.lib;winmm.lib;kernel32.lib;user32.lib;imm32.lib;gdi32.lib;usp10.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:/sdk/skia/out/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
@@ -159,6 +159,8 @@
     <ClCompile Include="Host_i.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Page.cpp" />
+    <ClCompile Include="TitleBar.cpp" />
+    <ClCompile Include="TitleBarWindowBtns.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="WindowMain.cpp" />
   </ItemGroup>
@@ -174,13 +176,17 @@
     <ClInclude Include="HostImpl.h" />
     <ClInclude Include="Host_h.h" />
     <ClInclude Include="Page.h" />
+    <ClInclude Include="res.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TitleBar.h" />
+    <ClInclude Include="TitleBarWindowBtns.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WindowMain.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PrivateBrowser.rc" />
+    <ResourceCompile Include="res.rc" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Host.idl" />

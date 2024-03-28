@@ -1,0 +1,41 @@
+#include "res.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+#include "winres.h"
+#undef APSTUDIO_READONLY_SYMBOLS
+
+IDI_LOGO ICON "logo.ico"
+IDR_ICON_FONT ICON_FONT "iconfont.ttf"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION 0,0,1,0
+PRODUCTVERSION 0,0,1,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "CompanyName", "GitHub xland"
+            VALUE "FileDescription", "FileManager"
+            VALUE "FileVersion", "0.0.1.0"
+            VALUE "InternalName", "FileManager.exe"
+            VALUE "LegalCopyright", "Copyright (C) LiuXiaolun 2023-2024"
+            VALUE "OriginalFilename", "FileManager.exe"
+            VALUE "ProductName", "FileManager"
+            VALUE "ProductVersion", "0.0.1.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END

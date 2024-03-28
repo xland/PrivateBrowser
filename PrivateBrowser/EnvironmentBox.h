@@ -15,7 +15,7 @@ public:
 	static bool Init(const std::function<void()> func);
 	static EnvironmentBox* Get();
 	HRESULT callBack(HRESULT result, ICoreWebView2Environment* env);
-	ICoreWebView2Environment* Environment;
+	ICoreWebView2Environment* env;
 private:
 	std::filesystem::path ensureAppFolder();
 	bool checkRegKey(const HKEY& key, const std::wstring& subKey);

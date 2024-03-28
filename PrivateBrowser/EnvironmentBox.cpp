@@ -2,27 +2,27 @@
 using namespace Microsoft::WRL;
 
 namespace {
-    static EnvironmentBox* env;
+    static EnvironmentBox* envBox;
 }
 
 EnvironmentBox* EnvironmentBox::Get()
 {
-    return env;
+    return envBox;
 }
 bool EnvironmentBox::Init(const std::function<void()> func)
 {
-    if (env) {
+    if (envBox) {
         return true;
     }
-    env = new EnvironmentBox();
-    if (!env->checkRuntime()) {
+    envBox = new EnvironmentBox();
+    if (!envBox->checkRuntime()) {
         return false;
     }
-    auto path = env->ensureAppFolder();
+    auto path = envBox->ensureAppFolder();
     if (path.empty()) {
         return false;
     }
-    env->func = func;
+    envBox->func = func;
     //auto options = Microsoft::WRL::Make<CoreWebView2EnvironmentOptions>();
     //options->put_AdditionalBrowserArguments(L"--allow-file-access-from-files");
     //Microsoft::WRL::ComPtr<ICoreWebView2EnvironmentOptions4> options4;
@@ -37,7 +37,7 @@ bool EnvironmentBox::Init(const std::function<void()> func)
     //defaultRegistration->SetAllowedOrigins(5, allowedSchemeOrigins);
     //ICoreWebView2CustomSchemeRegistration* registrations[1] = { defaultRegistration.Get() };
     //options4->SetCustomSchemeRegistrations(1, static_cast<ICoreWebView2CustomSchemeRegistration**>(registrations));
-    auto envCBInstance = Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(env, &EnvironmentBox::callBack);
+    auto envCBInstance = Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(envBox, &EnvironmentBox::callBack);
     HRESULT result = CreateCoreWebView2EnvironmentWithOptions(nullptr, path.c_str(), nullptr/*options.Get()*/, envCBInstance.Get());
     if (FAILED(result)) {
         return false;
@@ -115,7 +115,7 @@ bool EnvironmentBox::checkRuntime()
 
 HRESULT EnvironmentBox::callBack(HRESULT result, ICoreWebView2Environment* env)
 {
-    this->Environment = env;
+    this->env = env;
     func();
     return S_OK;
 }
