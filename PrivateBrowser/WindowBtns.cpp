@@ -1,9 +1,9 @@
-#include "TitleBarWindowBtns.h"
+#include "WindowBtns.h"
 #include <Windows.h>
 #include "App.h"
 
 
-void TitleBarWindowBtns::paint(SkCanvas* canvas)
+void WindowBtns::paint(SkCanvas* canvas)
 {
 	SkPaint paint;
 	if (hoverIndex == 0) {
@@ -36,13 +36,13 @@ void TitleBarWindowBtns::paint(SkCanvas* canvas)
 
 }
 
-void TitleBarWindowBtns::resize(const int& w, const int& h)
+void WindowBtns::resize(const int& w, const int& h)
 {
 	isDirty = true;
 	rect.setLTRB(w - 198.f, 0.f, (float)w, parent->rect.fBottom);
 }
 
-void TitleBarWindowBtns::mouseEnter(const int& x, const int& y)
+void WindowBtns::mouseEnter(const int& x, const int& y)
 {
 	int index = -1;
 	if (x < rect.fLeft + 66) {
@@ -60,7 +60,7 @@ void TitleBarWindowBtns::mouseEnter(const int& x, const int& y)
 	}
 }
 
-void TitleBarWindowBtns::mouseOut(const int& w, const int& h)
+void WindowBtns::mouseOut(const int& w, const int& h)
 {
 	hoverIndex = -1;
 	repaint();

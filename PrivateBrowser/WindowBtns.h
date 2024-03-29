@@ -1,9 +1,9 @@
 #pragma once
 #include "ControlBase.h"
-class TitleBarWindowBtns : public ControlBase
+class WindowBtns : public ControlBase
 {
 public:
-	TitleBarWindowBtns(ControlBase* parent) : ControlBase(parent) {};
+	WindowBtns(ControlBase* parent) : ControlBase(parent) {};
 private:
 	void paint(SkCanvas* canvas) override;
 	void resize(const int& w, const int& h) override;

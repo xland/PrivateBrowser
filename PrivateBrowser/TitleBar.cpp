@@ -1,12 +1,12 @@
 #include "TitleBar.h"
-#include "TitleBarWindowBtns.h"
+#include "WindowBtns.h"
 #include "AddressInput.h"
 #include "Windows.h"
 #include "App.h"
 
 TitleBar::TitleBar()
 {
-	ctrls.push_back(new TitleBarWindowBtns(this));
+	ctrls.push_back(new WindowBtns(this));
 	ctrls.push_back(new AddressInput(this));
 }
 
