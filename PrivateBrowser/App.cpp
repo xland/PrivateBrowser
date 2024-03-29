@@ -32,7 +32,6 @@ void App::Init(const HINSTANCE& hInstance) {
 		return;
 	}
 	app = new App(hInstance);
-    app->windowMain->show();
     EnvironmentBox::Init([]() {
         App::get()->windowMain->CreatePageController();
     });

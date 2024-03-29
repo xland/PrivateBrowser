@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AddressInput.cpp" />
+    <ClCompile Include="AddressTool.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="ControlBase.cpp" />
     <ClCompile Include="DialogProgress.cpp" />
@@ -162,7 +163,7 @@
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="SideBar.cpp" />
     <ClCompile Include="TitleBar.cpp" />
-    <ClCompile Include="TitleBarWindowBtns.cpp" />
+    <ClCompile Include="WindowBtns.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="WindowMain.cpp" />
   </ItemGroup>
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddressInput.h" />
+    <ClInclude Include="AddressTool.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="ControlBase.h" />
     <ClInclude Include="DialogProgress.h" />
@@ -184,7 +186,7 @@
     <ClInclude Include="SideBar.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TitleBar.h" />
-    <ClInclude Include="TitleBarWindowBtns.h" />
+    <ClInclude Include="WindowBtns.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WindowMain.h" />
   </ItemGroup>

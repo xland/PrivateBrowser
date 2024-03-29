@@ -15,9 +15,9 @@ WindowMain::WindowMain(const HINSTANCE& hInstance) {
     SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
     x = (rect.right - w) / 2;
     y = (rect.bottom - h) / 2;
-    initWindow(hInstance);
     ctrls.push_back(new TitleBar());
     ctrls.push_back(new SideBar());
+    initWindow(hInstance);
 }
 WindowMain::~WindowMain() {
     for (auto ctrl : ctrls)
@@ -30,7 +30,7 @@ void WindowMain::paintWindow()
 {    
     PAINTSTRUCT ps;
     BeginPaint(hwnd, &ps);
-    if (ps.rcPaint.top != 0) {
+    if (ps.rcPaint.top == ctrls[0]->rect.fBottom) {
         //todo 创建浏览器控件之后，也会导致一次刷新
         return;
     }
@@ -121,11 +121,12 @@ void WindowMain::initWindow(const HINSTANCE& hInstance)
         MessageBox(NULL, L"注册窗口类失败", L"系统提示", NULL);
         return;
     }
-    hwnd = CreateWindowEx(NULL, wcx.lpszClassName, title.c_str(),WS_OVERLAPPEDWINDOW, 
+    hwnd = CreateWindowEx(NULL, wcx.lpszClassName, title.c_str(), WS_VISIBLE| WS_OVERLAPPEDWINDOW,
         x, y, w, h, NULL, NULL, hInstance, static_cast<LPVOID>(this));
-    SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
-    const MARGINS shadowState{ 1,1,1,1 };
-    DwmExtendFrameIntoClientArea(hwnd, &shadowState);
+    DWMNCRENDERINGPOLICY policy = DWMNCRP_ENABLED;
+    DwmSetWindowAttribute(hwnd, DWMWA_NCRENDERING_POLICY, &policy, sizeof(policy));
+    MARGINS margins = { 1,1,1,1 };
+    DwmExtendFrameIntoClientArea(hwnd, &margins);
     
 }
 
@@ -225,6 +226,19 @@ LRESULT CALLBACK WindowMain::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
     {
         return false;
     }
+    case WM_GETMINMAXINFO:
+    {
+        MINMAXINFO* mminfo = (PMINMAXINFO)lParam;
+        RECT workArea;
+        SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0);
+        mminfo->ptMinTrackSize.x = 1200;
+        mminfo->ptMinTrackSize.y = 800;
+        mminfo->ptMaxSize.x = workArea.right - workArea.left-2;
+        mminfo->ptMaxSize.y = workArea.bottom - workArea.top-2;
+        mminfo->ptMaxPosition.x = 1;
+        mminfo->ptMaxPosition.y = 1;
+        return true;
+    }
     case WM_ERASEBKGND: {
         return false;
     }
@@ -269,8 +283,14 @@ LRESULT CALLBACK WindowMain::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
     case WM_LBUTTONDOWN:
     {
         isMouseDown = true;
-        hoverCtrl->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-        break;
+        if (hoverCtrl) {
+            hoverCtrl->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        }
+        if (ctrls[0]->ctrls[0]->hoverIndex == 99 && ctrls[0]->ctrls[0] != hoverCtrl) {
+            ctrls[0]->ctrls[0]->hoverIndex = -1;
+            ctrls[0]->ctrls[0]->repaint();
+        }
+        return true;
     }
     case WM_LBUTTONUP:
     {

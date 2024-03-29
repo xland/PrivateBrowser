@@ -25,6 +25,7 @@ public:
 	std::vector<ControlBase*> ctrls;
 	SkAutoMalloc surfaceMemory;
 	HWND hwnd;
+	bool isMouseDown{ false };
 	wil::com_ptr<ICoreWebView2Controller> controller;
 	wil::com_ptr<ICoreWebView2Controller> controller2;
 protected:
@@ -37,7 +38,6 @@ private:
 	LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	int nctest(const int& x, const int& y);
 	bool isTrackMouseEvent{ false };
-	bool isMouseDown{ false };
 	long w{ 1200 }, h{800};
 	int x, y;
 	void* pixelData;

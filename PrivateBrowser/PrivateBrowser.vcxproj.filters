@@ -48,13 +48,16 @@
     <ClCompile Include="TitleBar.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TitleBarWindowBtns.cpp">
+    <ClCompile Include="WindowBtns.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="AddressInput.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SideBar.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AddressTool.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,7 +102,7 @@
     <ClInclude Include="TitleBar.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TitleBarWindowBtns.h">
+    <ClInclude Include="WindowBtns.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="res.h">
@@ -109,6 +112,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SideBar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AddressTool.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

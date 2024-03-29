@@ -6,8 +6,8 @@
 
 TitleBar::TitleBar()
 {
-	ctrls.push_back(new WindowBtns(this));
 	ctrls.push_back(new AddressInput(this));
+	ctrls.push_back(new WindowBtns(this));
 }
 
 TitleBar::~TitleBar()

@@ -65,3 +65,31 @@ void WindowBtns::mouseOut(const int& w, const int& h)
 	hoverIndex = -1;
 	repaint();
 }
+
+void WindowBtns::mouseDown(const int& w, const int& h)
+{
+	ReleaseCapture();
+	auto win = App::get()->windowMain;
+	if (hoverIndex == 0) {
+		PostMessage(win->hwnd, WM_SYSCOMMAND, SC_MINIMIZE, 0);
+		hoverIndex = -1;
+		win->isMouseDown = false;
+		repaint();
+	}
+	else if (hoverIndex == 1) {
+		auto isMaximized = IsZoomed(win->hwnd) != 0;
+		if (isMaximized) {
+			PostMessage(win->hwnd, WM_SYSCOMMAND, SC_RESTORE, 0);
+		}
+		else {
+			PostMessage(win->hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+		}
+		win->isMouseDown = false;
+		hoverIndex = -1;
+		repaint();
+	}
+	else if (hoverIndex == 2) {
+		PostMessage(win->hwnd, WM_CLOSE, 0, 0); //PostMessageÒì²½£¬SendMessageÍ¬²½
+	}
+	
+}
