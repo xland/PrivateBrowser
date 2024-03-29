@@ -66,10 +66,17 @@ void ControlBase::resizeChildren(const int& w, const int& h)
     }
 }
 
-void ControlBase::mouseMoveChildren(const int& x, const int& y)
+ControlBase* ControlBase::contain(const int& x, const int& y)
 {
-    for (size_t i = 0; i < ctrls.size(); i++)
-    {
-        ctrls[i]->mouseMove(x, y);
+    if (rect.contains(x, y)) {
+        for (size_t i = 0; i < ctrls.size(); i++)
+        {
+            auto ctrl = ctrls[i]->contain(x, y);
+            if (ctrl) {
+                return ctrl;
+            }
+        }
+        return this;
     }
+    return nullptr;
 }

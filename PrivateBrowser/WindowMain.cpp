@@ -7,6 +7,7 @@
 #include "App.h"
 #include "EnvironmentBox.h"
 #include "TitleBar.h"
+#include "SideBar.h"
 using namespace Microsoft::WRL;
 
 WindowMain::WindowMain(const HINSTANCE& hInstance) {
@@ -16,9 +17,13 @@ WindowMain::WindowMain(const HINSTANCE& hInstance) {
     y = (rect.bottom - h) / 2;
     initWindow(hInstance);
     ctrls.push_back(new TitleBar());
+    ctrls.push_back(new SideBar());
 }
 WindowMain::~WindowMain() {
-
+    for (auto ctrl : ctrls)
+    {
+        delete ctrl;
+    }
 }
 
 void WindowMain::paintWindow()
@@ -81,9 +86,18 @@ void WindowMain::mouseMove(const int& x, const int& y)
         tme.dwHoverTime = 1;
         isTrackMouseEvent = TrackMouseEvent(&tme);
     }
-    for (auto& obj : ctrls)
+    ControlBase* ctrl{ nullptr };
+    for (size_t i = 0; i < ctrls.size(); i++)
     {
-        obj->mouseMove(x, y);
+        ctrl = ctrls[i]->contain(x, y);
+        if (ctrl) {
+            if (hoverCtrl && ctrl != hoverCtrl) {
+                hoverCtrl->mouseOut(x,y);
+            }
+            hoverCtrl = ctrl;
+            ctrl->mouseEnter(x, y);
+            break;
+        }
     }
 }
 
@@ -215,7 +229,6 @@ LRESULT CALLBACK WindowMain::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
         return false;
     }
     case WM_PAINT: {
-        auto aa = this->hwnd;
         paintWindow();
         return true;
     }
@@ -237,9 +250,43 @@ LRESULT CALLBACK WindowMain::wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
         onSize(LOWORD(lParam), HIWORD(lParam));
         return true;
     }
+    case WM_MOUSELEAVE: {
+        if (!isMouseDown) {
+            TRACKMOUSEEVENT tme = {};
+            tme.cbSize = sizeof(TRACKMOUSEEVENT);
+            tme.dwFlags = TME_CANCEL | TME_HOVER | TME_LEAVE;
+            tme.hwndTrack = hwnd;
+            TrackMouseEvent(&tme);
+            isTrackMouseEvent = false;            
+        }
+        if (hoverCtrl) {
+            hoverCtrl->mouseOut(-1,-1);
+            hoverCtrl = nullptr;
+        }
+        isMouseDown = false;
+        return true;
+    }
+    case WM_LBUTTONDOWN:
+    {
+        isMouseDown = true;
+        hoverCtrl->mouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        break;
+    }
+    case WM_LBUTTONUP:
+    {
+        hoverCtrl->mouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        isMouseDown = false;
+        break;
+    }
     case WM_MOUSEMOVE:
     {
-        mouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        if (isMouseDown) {
+            hoverCtrl->mouseDrag(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        }
+        else
+        {
+            mouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+        }        
         break;
     }
     case WM_DESTROY: {
@@ -276,9 +323,6 @@ int WindowMain::nctest(const int& x, const int& y)
     }
     else if (x < size && y < h - size && y>size) {
         return HTLEFT;
-    }
-    else if (x < 200 && y< (LONG)ctrls[0]->rect.fBottom) {
-        return HTCAPTION;
     }
     else {
         if (!isTrackMouseEvent) {

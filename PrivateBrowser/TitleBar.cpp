@@ -1,6 +1,8 @@
 #include "TitleBar.h"
 #include "TitleBarWindowBtns.h"
 #include "AddressInput.h"
+#include "Windows.h"
+#include "App.h"
 
 TitleBar::TitleBar()
 {
@@ -18,10 +20,10 @@ void TitleBar::paint(SkCanvas* canvas)
 		return;
 	}
 	SkPaint paint;
-	paint.setColor(0xFFD3E3FD);
+	paint.setColor(0xFFbae0ff);
 	paint.setStyle(SkPaint::kFill_Style);
 	canvas->drawRect(rect, paint);
-	paint.setColor(0xFF0B57D0);
+	paint.setColor(0xFFBBBBBB);
 	canvas->drawLine(0.f, rect.fBottom-1, rect.fRight, rect.fBottom - 1, paint);
 	paintChildren(canvas);
 }
@@ -32,7 +34,30 @@ void TitleBar::resize(const int& w, const int& h)
 	resizeChildren(w, h);
 }
 
-void TitleBar::mouseMove(const int& x, const int& y)
+void TitleBar::mouseDown(const int& w, const int& h)
 {
-	mouseMoveChildren(x, y);
+	isDragging = true;
+	GetCursorPos(&startPos);
+	ScreenToClient(App::get()->windowMain->hwnd, &startPos);
+	SetCapture(App::get()->windowMain->hwnd);
+}
+
+void TitleBar::mouseDrag(const int& w, const int& h)
+{
+	if (!isDragging) return;
+	POINT point;
+	auto hwnd = App::get()->windowMain->hwnd;
+	GetCursorPos(&point);
+	ScreenToClient(hwnd, &point);
+	RECT windowRect;
+	GetWindowRect(hwnd, &windowRect);
+	int dx = windowRect.left + point.x - startPos.x;
+	int dy = windowRect.top + point.y - startPos.y;
+	SetWindowPos(hwnd, nullptr, dx, dy, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+}
+
+void TitleBar::mouseUp(const int& w, const int& h)
+{
+	isDragging = false;
+	ReleaseCapture();
 }

@@ -13,10 +13,11 @@ public:
 	void repaint();
 	void paintChildren(SkCanvas* canvas);
 	void resizeChildren(const int& w, const int& h);
-	void mouseMoveChildren(const int& x, const int& y);
+	ControlBase* contain(const int& x, const int& y);
 	virtual void paint(SkCanvas* canvas) {};
 	virtual void resize(const int& w, const int& h) {};
-	virtual void mouseMove(const int& x, const int& y) {};
+	virtual void mouseEnter(const int& x, const int& y) {};
+	virtual void mouseOut(const int& x, const int& y) {};
 	virtual void mouseDown(const int& x, const int& y) {};
 	virtual void mouseUp(const int& x, const int& y) {};
 	virtual void mouseDrag(const int& x, const int& y) {};

@@ -7,8 +7,6 @@
 #include <include/core/SkFontStyle.h>
 #include <include/core/SkGraphics.h>
 #include <include/ports/SkTypeface_win.h>
-
-
 #include "res.h"
 #include "WindowMain.h"
 

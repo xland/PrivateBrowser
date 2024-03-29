@@ -160,6 +160,7 @@
     <ClCompile Include="Host_i.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Page.cpp" />
+    <ClCompile Include="SideBar.cpp" />
     <ClCompile Include="TitleBar.cpp" />
     <ClCompile Include="TitleBarWindowBtns.cpp" />
     <ClCompile Include="Util.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Page.h" />
     <ClInclude Include="res.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SideBar.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TitleBar.h" />
     <ClInclude Include="TitleBarWindowBtns.h" />

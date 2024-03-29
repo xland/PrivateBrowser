@@ -42,22 +42,26 @@ void TitleBarWindowBtns::resize(const int& w, const int& h)
 	rect.setLTRB(w - 198.f, 0.f, (float)w, parent->rect.fBottom);
 }
 
-void TitleBarWindowBtns::mouseMove(const int& x, const int& y)
+void TitleBarWindowBtns::mouseEnter(const int& x, const int& y)
 {
 	int index = -1;
-	if (rect.contains(x, y)) {
-		if (x < rect.fLeft + 66) {
-			index = 0;
-		}
-		else if (x < rect.fLeft + 132) {
-			index = 1;
-		}
-		else {
-			index = 2;
-		}
+	if (x < rect.fLeft + 66) {
+		index = 0;
+	}
+	else if (x < rect.fLeft + 132) {
+		index = 1;
+	}
+	else {
+		index = 2;
 	}
 	if (index != hoverIndex) {
 		hoverIndex = index;
 		repaint();
 	}
+}
+
+void TitleBarWindowBtns::mouseOut(const int& w, const int& h)
+{
+	hoverIndex = -1;
+	repaint();
 }

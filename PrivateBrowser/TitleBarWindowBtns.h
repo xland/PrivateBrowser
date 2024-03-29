@@ -7,6 +7,7 @@ public:
 private:
 	void paint(SkCanvas* canvas) override;
 	void resize(const int& w, const int& h) override;
-	void mouseMove(const int& x, const int& y) override;
+	void mouseEnter(const int& x, const int& y) override;
+	void mouseOut(const int& w, const int& h) override;
 };
 

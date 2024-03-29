@@ -20,6 +20,7 @@ public:
 	void show();
 	void initWindow(const HINSTANCE& hInstance);
 	bool CreatePageController();
+	ControlBase* hoverCtrl;
 	std::unique_ptr<SkCanvas> canvas;
 	std::vector<ControlBase*> ctrls;
 	SkAutoMalloc surfaceMemory;
@@ -36,6 +37,7 @@ private:
 	LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	int nctest(const int& x, const int& y);
 	bool isTrackMouseEvent{ false };
+	bool isMouseDown{ false };
 	long w{ 1200 }, h{800};
 	int x, y;
 	void* pixelData;
