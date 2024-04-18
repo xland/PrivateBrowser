@@ -26,11 +26,25 @@ void AddressTool::paint(SkCanvas* canvas)
 void AddressTool::resize(const int& w, const int& h)
 {
 	isDirty = true;
-	rect.setLTRB(parent->rect.fRight-200, parent->rect.fTop, parent->rect.fRight, parent->rect.fBottom);
+	rect.setLTRB(parent->rect.fRight-160, parent->rect.fTop, parent->rect.fRight, parent->rect.fBottom);
 }
 
 void AddressTool::mouseEnter(const int& x, const int& y)
 {
+	//int index = -1;
+	//if (x < rect.fLeft + 66) {
+	//	index = 0;
+	//}
+	//else if (x < rect.fLeft + 132) {
+	//	index = 1;
+	//}
+	//else {
+	//	index = 2;
+	//}
+	//if (index != hoverIndex) {
+	//	hoverIndex = index;
+	//	repaint();
+	//}
 }
 
 void AddressTool::mouseOut(const int& w, const int& h)
